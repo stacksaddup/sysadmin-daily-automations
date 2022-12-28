@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+
+# debug
+set -e
+
+# get parameters
+function usage {
+    cat <<EOF
+Usage: $(basename $0) SRC DEST [OPTIONS]
+
+  Backup the data.
+
+Options:
+  --help    Show this message and exit.
+EOF
+}
+
+if (( $# < 2 )); then
+    usage
+    exit -1
+fi
+
+src="$1"
+dest="$2"
+
+echo "Doing backup from [$1] to [$2]..."
+rsync -avz "$src" "$dest"

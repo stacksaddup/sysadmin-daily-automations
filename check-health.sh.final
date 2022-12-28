@@ -1,0 +1,43 @@
+#!/usr/bin/env bash
+
+# debug
+set -e
+
+# get parameters
+function usage {
+    cat <<EOF
+Usage: $(basename $0) STATUS [ENV] [OPTIONS]
+
+  Check health of pods.
+
+Options:
+  --help    Show this message and exit.
+EOF
+}
+
+if (( $# < 1 )); then
+    usage
+    exit -1
+fi
+
+status="$1"
+env='dev'
+
+if (( $# >= 2 )); then
+    env="$2"
+fi
+
+echo "INFO: Find $status pods in $env..."
+./get-health.sh | grep "^$env" | grep "$status"
+echo
+
+echo "WARN: Find critical restart pods in $env..."
+./get-health.sh | grep "^$env" | awk '$4 > 10'
+echo
+
+echo "INFO: Show the age of $status pods"
+running_pods=$(./get-health.sh | grep "^$env" | grep "$status")
+for line in "$running_pods";
+do
+    echo "$line" | awk '{print $1, $NF}'
+done | column -t
