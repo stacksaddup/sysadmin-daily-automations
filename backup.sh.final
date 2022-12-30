@@ -23,5 +23,14 @@ fi
 src="$1"
 dest="$2"
 
-echo "Doing backup from [$1] to [$2]..."
+echo "Doing backup from [$src] to [$dest]..."
 rsync -avz "$src" "$dest"
+echo
+
+cd "$dest"
+old_files=$(ls -tr | head -n -3)
+echo -e "Old files:\n$old_files\n"
+if [[ -n $old_files ]]; then
+    echo "Deleting old files..."
+    echo "$old_files" | xargs /bin/rm -f
+fi
