@@ -36,8 +36,8 @@ echo "WARN: Find critical restart pods in $env..."
 echo
 
 echo "INFO: Show the age of $status pods"
-running_pods=$(./get-health.sh | grep "^$env" | grep "$status")
-for line in "$running_pods";
+matched_lines=$(./get-health.sh | grep "^$env" | grep "$status")
+for line in "$matched_lines";
 do
     echo "$line" | awk '{print $1, $NF}'
 done | column -t
