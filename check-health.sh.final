@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# debug
+# exit on error
 set -e
 
 # get parameters
